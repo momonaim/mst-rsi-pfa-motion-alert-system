@@ -31,6 +31,14 @@ Ce projet met en œuvre un **système de surveillance intelligent** combinant un
 - ✉️ Envoi d’un e-mail avec photo + vidéo + lien vers le live stream.
 - 🌐 Interface web de streaming local.
 
+## 📽️ Démonstration
+
+- 📸 Capture automatique d'image
+- 🎥 Enregistrement vidéo de 5 secondes
+- 📧 Envoi d'e-mail avec fichiers en pièce jointe
+- 🔴 Streaming en temps réel via webcam
+---
+
 ## 🧰 Installation
 
 ### 1. Prérequis
@@ -43,25 +51,32 @@ Ce projet met en œuvre un **système de surveillance intelligent** combinant un
 ### 2. Cloner le dépôt
 
 ```bash
-git clone https://github.com/votre-nom-utilisateur/nom-du-repo.git
-cd nom-du-repo
+git clone https://github.com/momonaim/mst-rsi-pfa-motion-alert-system
+cd mst-rsi-pfa-motion-alert-system
 ```
 
 ### 3. Installer les dépendances Python
 
 ```bash
-pip install opencv-python flask
+pip install opencv-python flask python-dotenv
 ```
 
-### 4. Modifier les identifiants e-mail
+### 4. Configuration de l’environnement
 
-Dans le fichier Python :
+Copiez le fichier `.env.example` en `.env`, puis modifiez les valeurs avec vos identifiants :
 
+```bash
+cp .env.example .env
+```
+Ouvrez .env et renseignez :
 ```bash
 EMAIL_SENDER = "votre.email@gmail.com"
 EMAIL_PASSWORD = "votre_mot_de_passe"
 EMAIL_RECEIVER = "destinataire@email.com"
 ```
+
+ℹ️ Pour Gmail, utilisez un mot de passe d'application si l'authentification à deux facteurs est activée.
+
 
 ### 5. Lancer le serveur Flask
 
@@ -69,13 +84,14 @@ EMAIL_RECEIVER = "destinataire@email.com"
 python app.py
 ```
 
-Le serveur tourne sur : http://localhost:5000
+  Le serveur sera disponible à :  
+🔗 [http://localhost:5000](http://localhost:5000)
 
 ### ⚙️ Exemple de déclenchement
 
-L’Arduino envoie une requête à :
+Le point d’alerte appelé par Arduino Yun :  
+🔗 [http://localhost:5000/alert](http://localhost:5000/alert)
 
-http://<ip_serveur>:5000/alert
 Le script Python :
 
 - Capture une photo.
@@ -85,6 +101,10 @@ Le script Python :
 - Envoie l’e-mail.
 
 - Rend le flux accessible à : /stream.
+
+---
+
+
 
 ## 📚 Structure du projet
 
@@ -97,11 +117,18 @@ Le script Python :
 │ └── stream.html # Interface de streaming
 └── README.md # Ce fichier
 ```
-
+--- 
 ## 📄 Licence
 
 Ce projet est à usage académique. Vous pouvez l’adapter ou le partager à des fins éducatives.
 
+---
 ### Realisé par:
 
 - MOUADILI Abdelmounim
+
+---
+
+## 🔗 Lien GitHub
+
+[https://github.com/momonaim/mst-rsi-pfa-motion-alert-system](https://github.com/momonaim/mst-rsi-pfa-motion-alert-system)
