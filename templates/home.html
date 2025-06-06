@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Accueil - Système de Surveillance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      height: 100%;
+      background-color: #121212;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00ffcc;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 5px #000;
+    }
+
+    .btn {
+      background-color: #00ffcc;
+      border: none;
+      color: #000;
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #00ccaa;
+    }
+
+    .copyright {
+      font-size: 0.7rem;
+      color: #888;
+      text-align: center;
+      margin-top: 5px;
+      padding-top: 8px;
+      border-top: 1px solid #333;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+    }
+
+    .modal-content {
+      background-color: #222;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #00ffcc;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #fff;
+    }
+
+    .modal-btn {
+      background-color: #00ffcc;
+      border: none;
+      color: #000;
+      padding: 8px 16px;
+      margin: 10px;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .modal-btn:hover {
+      background-color: #00ccaa;
+    }
+
+    #resultMessage {
+      margin: 15px 0;
+      padding: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .success {
+      background-color: #2d572c;
+      color: #4caf50;
+    }
+
+    .error {
+      background-color: #572d2d;
+      color: #f44336;
+    }
+  </style>
+</head>
+<body>
+  <h1>👋 Bienvenue sur le Système de Surveillance</h1>
+
+  <a href="/stream" class="btn">📺 Accéder au Live Stream</a>
+  <a id="alertBtn" class="btn">🚨 Tester l'Alerte</a>
+
+  <div class="copyright">
+    &copy; 2025 Security Monitoring System<br>
+    MOUADILI Abdelmounim
+  </div>
+
+  <!-- Modal d'avertissement -->
+  <div id="warningModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>⚠ Attention</h2>
+      <p>Cette action va déclencher une alerte et enregistrer une vidéo de 5 secondes.</p>
+      <div id="resultMessage"></div>
+      <div id="actionButtons">
+        <button id="confirmAlert" class="modal-btn">Confirmer</button>
+        <button id="cancelAlert" class="modal-btn">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Récupérer les éléments
+    const alertBtn = document.getElementById('alertBtn');
+    const modal = document.getElementById('warningModal');
+    const closeBtn = document.querySelector('.close');
+    const confirmBtn = document.getElementById('confirmAlert');
+    const cancelBtn = document.getElementById('cancelAlert');
+    const resultMessage = document.getElementById('resultMessage');
+    const actionButtons = document.getElementById('actionButtons');
+
+    // Ouvrir le modal quand on clique sur le bouton d'alerte
+    alertBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      resetModal();
+      modal.style.display = 'block';
+    });
+
+    // Réinitialiser le modal
+    function resetModal() {
+      resultMessage.style.display = 'none';
+      resultMessage.className = '';
+      actionButtons.style.display = 'block';
+    }
+
+    // Fermer le modal
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
+    // Fermer le modal quand on clique sur la croix
+    closeBtn.addEventListener('click', closeModal);
+
+    // Fermer le modal quand on clique sur Annuler
+    cancelBtn.addEventListener('click', closeModal);
+
+    // Gérer la confirmation d'alerte
+    confirmBtn.addEventListener('click', async function() {
+      try {
+        // Désactiver le bouton pendant le traitement
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Traitement en cours...';
+
+        // Appeler l'endpoint /alert
+        const response = await fetch('/alert');
+        const data = await response.text();
+
+        // Afficher le résultat
+        actionButtons.style.display = 'none';
+        resultMessage.style.display = 'block';
+
+        if (response.ok) {
+          resultMessage.textContent = data;
+          resultMessage.classList.add('success');
+        } else {
+          resultMessage.textContent = data;
+          resultMessage.classList.add('error');
+        }
+
+        // Réactiver le bouton
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Confirmer';
+
+        // Fermer automatiquement après 3 secondes
+        setTimeout(closeModal, 3000);
+      } catch (error) {
+        resultMessage.textContent = `❌ Erreur: ${error.message}`;
+        resultMessage.classList.add('error');
+        resultMessage.style.display = 'block';
+        actionButtons.style.display = 'none';
+
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Confirmer';
+      }
+    });
+
+    // Fermer le modal si on clique en dehors
+    window.addEventListener('click', function(event) {
+      if (event.target == modal) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
