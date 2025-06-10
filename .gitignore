@@ -1,0 +1,71 @@
+# .gitignore
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Build and distribution files
+build/
+dist/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# Log files
+*.log
+logs/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Project-specific files to ignore
+photo_lowres.jpg
+clip.mp4
+*.mp4
+*.jpg
+*.jpeg
+
+# Database files (if any)
+*.db
+*.sqlite
+
+# Byte-compiled / optimized / DLL files
+*.py[co]
+
+# C extensions
+*.so
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# macOS
+.DS_Store
